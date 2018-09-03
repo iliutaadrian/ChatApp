@@ -14,8 +14,24 @@ class ContactsController extends Controller
         return response()->json($user);
     }
 
+    public function getNumberUnreadMessages(){
+        $user = User::count()
+    }
+
     public function getMessagesFor($id){
-        $messages = Messages::where('from', $id)->orWhere('to', $id)->get();
+        $messages =
+            Messages::where(
+                function($q) use ($id){
+                    $q->where('from', auth()->id());
+                    $q->where('to', $id);
+                })
+                ->orWhere(
+                    function($q) use ($id){
+                        $q->where('from', $id);
+                        $q->where('to', auth()->id());
+                    })
+                ->get();
+
         return response()->json($messages);
     }
 

@@ -15,7 +15,6 @@
     import Conversation from './Conversation';
     import ContactList from './ContactList';
 
-
     export default {
         props: {
           user:{
@@ -31,7 +30,7 @@
             }
         },
         mounted() {
-            Echo.private('messages${this.user.id}')
+            Echo.private('messages.' + this.user.id)
                 .listen('NewMessage', (e) => {
                 this.handleIncoming(e.message);
             });
@@ -43,7 +42,7 @@
         },
         methods:{
             startConversationWith(contact){
-                axios.get(`/conversation/${contact.id}`)
+                axios.get('/conversation/'+ contact.id)
                     .then((response)=>{
                     this.messages = response.data;
                     this.selectedContact = contact;
@@ -57,6 +56,7 @@
                     this.saveNewMessage(message);
                     return;
                 }
+                alert('new notification');
             }
         },
         components: {Conversation, ContactList}

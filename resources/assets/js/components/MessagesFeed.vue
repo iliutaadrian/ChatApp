@@ -25,7 +25,7 @@
         methods: {
             scrollToBottom(){
                 setTimeout(()=>{
-                    $('.feed').scrollTop($('.feed').height());
+                    $('.feed').scrollTop($('.feed ul').height() + 20);
                 }, 50);
 
             }

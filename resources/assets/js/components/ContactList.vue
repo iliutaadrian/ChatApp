@@ -1,7 +1,7 @@
 <template>
     <div class="contact-list">
         <ul>
-            <li v-for="(contact, index) in contacts" :key="contact.id" @click="selectContact(index, contact)" :class="{ 'selected':  index == selected}" >
+            <li v-for="(contact, index) in contacts" :key="contact.id" @click="selectContact(index, contact)" :class="{ 'selected':  index === selected}" >
                 <div class="row">
                     <div class="col-md-3">
                         <div class="avatar">
@@ -16,10 +16,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
-
             </li>
         </ul>
     </div>
@@ -35,7 +31,7 @@
         },
         data(){
             return{
-                selected: 0
+                selected: -1
             };
         },
         methods:{

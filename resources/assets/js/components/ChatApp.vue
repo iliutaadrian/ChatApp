@@ -2,7 +2,7 @@
     <div class="chat-app">
         <div class="row">
             <div class="col-md-4">
-                <ContactList :contacts="contacts" @selected="startConversationWith"/>
+                <ContactList :contacts="contacts" :onlineUsers="onlineUsers" @selected="startConversationWith"/>
             </div>
             <div class="col-md-8">
                 <Conversation :contact="selectedContact" :messages="messages" @new="saveNewMessage"/>
@@ -26,7 +26,8 @@
             return{
                 selectedContact: null,
                 messages: [],
-                contacts: []
+                contacts: [],
+                onlineUsers: []
             }
         },
         mounted() {
@@ -75,6 +76,21 @@
                     return single;
                 });
             }
+        },
+        created(){
+            Echo.join('online')
+                .here((users)=>{
+                    this.onlineUsers = users;
+                })
+                .joining((user)=>{
+                    console.log(user);
+                    this.onlineUsers.push(user);
+                })
+                .leaving((user) =>{
+                    this.onlineUsers = this.onlineUsers.filter((u) => {
+                        u != user
+                    })
+                });
         },
         components: {Conversation, ContactList}
     }

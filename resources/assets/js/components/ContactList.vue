@@ -12,7 +12,9 @@
 
                     <div class="col-md-7">
                         <div class="contact">
-                            <p class="name">{{ contact.name }}</p><div class="online"></div>
+                            <p class="name">{{ contact.name }}</p>
+                            <div class="online" v-if="checkUserOnline(contact)"></div>
+                            <div class="onfline" v-else></div>
                             <p class="email">{{ contact.email }}</p>
                         </div>
                     </div>
@@ -32,6 +34,10 @@
             contacts:{
                 type: Array,
                 default: []
+            },
+            onlineUsers:{
+                type: Array,
+                default: []
             }
         },
         data(){
@@ -43,6 +49,9 @@
             selectContact(index, contact){
                 this.selected = index;
                 this.$emit('selected', contact);
+            },
+            checkUserOnline($user){
+                return _.find(this.onlineUsers, {id: $user.id});
             }
         },
         computed:{
@@ -85,8 +94,19 @@
                         border-radius: 50%;
                     }
 
-                    .online{
+                    .ofline{
                         background-color: red;
+                        width: 16px;
+                        height: 16px;
+                        position: relative;
+                        border: 1px solid gray;
+                        border-radius: 50%;
+                        left: 50px;
+                        bottom: 18px;
+                    }
+
+                    .online{
+                        background-color: #00ff54;
                         width: 16px;
                         height: 16px;
                         position: relative;

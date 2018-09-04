@@ -1,19 +1,24 @@
 <template>
     <div class="contact-list">
         <ul>
-            <li v-for="(contact, index) in contacts" :key="contact.id" @click="selectContact(index, contact)" :class="{ 'selected':  index === selected}" >
+            <li v-for="(contact, index) in sortContactByNotifications" :key="contact.id" @click="selectContact(index, contact)" :class="{ 'selected':  index === selected}" >
                 <div class="row">
                     <div class="col-md-3">
                         <div class="avatar">
                             <img :src="contact.profile_image" alt="contact.name">
+                            <div class="online"></div>
                         </div>
                     </div>
 
-                    <div class="col-md-9">
+                    <div class="col-md-7">
                         <div class="contact">
-                            <p class="name">{{ contact.name }}</p>
+                            <p class="name">{{ contact.name }}</p><div class="online"></div>
                             <p class="email">{{ contact.email }}</p>
                         </div>
+                    </div>
+
+                    <div class="col-md-1">
+                        <div class="unread" v-if="contact.unread"></div>
                     </div>
                 </div>
             </li>
@@ -38,6 +43,13 @@
             selectContact(index, contact){
                 this.selected = index;
                 this.$emit('selected', contact);
+            }
+        },
+        computed:{
+            sortContactByNotifications(){
+                return _.sortBy(this.contacts, [(contact)=>{
+                    return contact.unread;
+                }]).reverse();
             }
         }
     }
@@ -72,6 +84,17 @@
                         height: 70px;
                         border-radius: 50%;
                     }
+
+                    .online{
+                        background-color: red;
+                        width: 16px;
+                        height: 16px;
+                        position: relative;
+                        border: 1px solid gray;
+                        border-radius: 50%;
+                        left: 50px;
+                        bottom: 18px;
+                    }
                 }
 
                 .contact{
@@ -86,6 +109,17 @@
                     .email{
                         font-size: 12px;
                     }
+                }
+
+                .unread{
+                    background-color: blue;
+                    width: 16px;
+                    height: 16px;
+                    position: relative;
+                    border: 1px solid gray;
+                    border-radius: 50%;
+                    right: 12px;
+                    top: 30px;
                 }
             }
         }

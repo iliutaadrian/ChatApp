@@ -6,15 +6,14 @@
                     <div class="col-md-3">
                         <div class="avatar">
                             <img :src="contact.profile_image" alt="contact.name">
-                            <div class="online"></div>
+                            <ContactListOnline :onlineUsers="onlineUsers" :contact="contact"></ContactListOnline>
                         </div>
                     </div>
 
                     <div class="col-md-7">
                         <div class="contact">
                             <p class="name">{{ contact.name }}</p>
-                            <div class="online" v-if="checkUserOnline(contact)"></div>
-                            <div class="onfline" v-else></div>
+
                             <p class="email">{{ contact.email }}</p>
                         </div>
                     </div>
@@ -29,13 +28,15 @@
 </template>
 
 <script>
+    import ContactListOnline from './ContactListOnline';
+
     export default {
         props:{
             contacts:{
                 type: Array,
                 default: []
             },
-            onlineUsers:{
+            onlineUsers: {
                 type: Array,
                 default: []
             }
@@ -49,9 +50,6 @@
             selectContact(index, contact){
                 this.selected = index;
                 this.$emit('selected', contact);
-            },
-            checkUserOnline($user){
-                return _.find(this.onlineUsers, {id: $user.id});
             }
         },
         computed:{
@@ -60,7 +58,8 @@
                     return contact.unread;
                 }]).reverse();
             }
-        }
+        },
+        components:{ContactListOnline}
     }
 </script>
 
@@ -70,68 +69,44 @@
         overflow: scroll;
         border-right: 1px solid gray;
 
-        ul{
+        ul {
             padding-left: 0;
             list-style-type: none;
 
-            .selected{
+            .selected {
                 background-color: #e0e0e0;
             }
 
-            li{
+            li {
                 padding: 2px;
                 border-bottom: 1px solid gray;
                 height: 90px;
                 cursor: pointer;
 
-
-
-                .avatar{
+                .avatar {
                     padding-left: 1px;
                     padding-top: 9px;
-                    img{
+                    img {
                         height: 70px;
                         border-radius: 50%;
                     }
-
-                    .ofline{
-                        background-color: red;
-                        width: 16px;
-                        height: 16px;
-                        position: relative;
-                        border: 1px solid gray;
-                        border-radius: 50%;
-                        left: 50px;
-                        bottom: 18px;
-                    }
-
-                    .online{
-                        background-color: #00ff54;
-                        width: 16px;
-                        height: 16px;
-                        position: relative;
-                        border: 1px solid gray;
-                        border-radius: 50%;
-                        left: 50px;
-                        bottom: 18px;
-                    }
                 }
 
-                .contact{
+                .contact {
                     padding-left: 3px;
 
-                    .name{
+                    .name {
                         margin: 0;
                         padding-top: 19px;
                         font-size: 17px;
                     }
 
-                    .email{
+                    .email {
                         font-size: 12px;
                     }
                 }
 
-                .unread{
+                .unread {
                     background-color: blue;
                     width: 16px;
                     height: 16px;
@@ -143,7 +118,5 @@
                 }
             }
         }
-
-
     }
 </style>

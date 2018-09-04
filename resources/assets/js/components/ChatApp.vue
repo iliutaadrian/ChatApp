@@ -27,7 +27,7 @@
                 selectedContact: null,
                 messages: [],
                 contacts: [],
-                onlineUsers: []
+                onlineUsers: [],
             }
         },
         mounted() {
@@ -40,6 +40,19 @@
                 .then((response) => {
                     this.contacts = response.data;
             });
+
+            Echo.join('online')
+                .here((users)=>{
+                    this.onlineUsers = users;
+                })
+                .joining((user)=>{
+                    this.onlineUsers.push(user);
+                })
+                .leaving((user) =>{
+                    this.onlineUsers = this.onlineUsers.filter((u) => {
+                        u != user
+                    });
+                });
         },
         methods:{
             startConversationWith(contact){
@@ -65,7 +78,6 @@
                     if(single.id != contact.id){
                         return single;
                     }
-
                     if(reset){
                         single.unread = 0;
                     }
@@ -76,21 +88,6 @@
                     return single;
                 });
             }
-        },
-        created(){
-            Echo.join('online')
-                .here((users)=>{
-                    this.onlineUsers = users;
-                })
-                .joining((user)=>{
-                    console.log(user);
-                    this.onlineUsers.push(user);
-                })
-                .leaving((user) =>{
-                    this.onlineUsers = this.onlineUsers.filter((u) => {
-                        u != user
-                    })
-                });
         },
         components: {Conversation, ContactList}
     }

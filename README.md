@@ -1,11 +1,4 @@
-# ChatApp
-Chat App made with Laravel, VueJs, MySql
-
-# install composer dependencies
-composer update
-
-# install npm dependencies
-npm install
-
-# generate a key for your application
-php artisan key:generate
+Real time chat using 
+Vue with bootstrap, 
+Laravel with Pusher for real time event broadcasting,
+MySql for db
